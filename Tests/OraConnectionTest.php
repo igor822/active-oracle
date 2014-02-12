@@ -3,9 +3,9 @@ namespace DataSource\OraConnection\Tests;
 
 use DataSource\OraConnection;
 
-//require_once '../autoload.php';
+require_once '../../autoload.php';
 
-require_once '../OraConnection.php';
+//require_once '../OraConnection.php';
 
 class OraConnectionTest extends \PHPUnit_Framework_TestCase {
 
@@ -67,7 +67,10 @@ class OraConnectionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertNotEmpty($stid);
 
 		$result = $ora_conn->fetch($stid);
-		var_dump($result);
+
+		$this->assertNotEmpty($result);
+		$this->assertInternalType('array', $result);
+		
 	}
 
 }

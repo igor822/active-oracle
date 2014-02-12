@@ -2,7 +2,6 @@
 namespace DataSource;
 
 use DataSource\OraConnection\Exception as DataSourceException;
-//require_once '../autoload.php';
 
 class OraConnection {
 
