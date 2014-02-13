@@ -1,5 +1,5 @@
 <?php
-namespace DataSource\OraConnection\ConnectionException;
+namespace DataSource\Exception\ConnectionException;
 
 class ConnectionException extends \Exception {
 
