@@ -5,8 +5,6 @@ use DataSource\Connector\OracleConnector;
 
 require_once '../../autoload.php';
 
-//require_once '../OracleConnector.php';
-
 class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testIfInstanceOf() {
