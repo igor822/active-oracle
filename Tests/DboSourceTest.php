@@ -42,7 +42,7 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase {
 	 * @depends testInstanceOfConnector
 	 */
 	public function testQueryFromSourceGettingConnector(\DataSource\Connector\OracleConnector $connector = null) {
-		$query = 'select * from hr.regions where rownum < 10';
+		$query = 'select * from dual';
 
 		$connector->setDataSource(self::$_dataSource)->openConnection();
 		$stid = $connector->query($query);
