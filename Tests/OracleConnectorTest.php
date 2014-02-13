@@ -7,6 +7,13 @@ require_once '../../autoload.php';
 
 class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 
+	protected static $_dataSource = array(
+		'username' => 'hr',
+		'password' => 'root',
+		'service' => '//localhost:1521',
+		'persistent' => true
+	);
+
 	public function testIfInstanceOf() {
 		$ora_conn = OracleConnector::connect();
 		$this->assertInstanceOf('DataSource\Connector\OracleConnector', $ora_conn);
@@ -30,14 +37,7 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 	 * @depends testCheckIfGetInstanceIsTheSame
 	 */
 	public function testOpenCloseConnection(OracleConnector $ora_conn = null) {
-		$dataSource = array(
-			'username' => 'hr',
-			'password' => 'root',
-			'service' => '//localhost:1521',
-			'persistent' => true
-		);
-
-		$ora_conn->setDataSource($dataSource);
+		$ora_conn->setDataSource(self::$_dataSource);
 		$conn = $ora_conn->openConnection();
 		
 		$this->assertTrue($ora_conn->isConnected(), 'Is connected');
@@ -52,14 +52,7 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 	public function testSomeQuery(OracleConnector $ora_conn = null) {
 		$query = 'select * from hr.regions where rownum < 10';
 
-		$dataSource = array(
-			'username' => 'hr',
-			'password' => 'root',
-			'service' => '//localhost:1521',
-			'persistent' => true
-		);
-
-		$ora_conn->setDataSource($dataSource)->openConnection();
+		$ora_conn->setDataSource(self::$_dataSource)->openConnection();
 		$stid = $ora_conn->query($query);
 
 		$this->assertNotEmpty($stid);
