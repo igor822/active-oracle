@@ -44,6 +44,8 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 
 		$ora_conn->closeConnection();
 		$this->assertFalse($ora_conn->isConnected(), 'Is disconnected');
+
+
 	}
 
 	/**
@@ -57,8 +59,8 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertNotEmpty($stid);
 
-		$result = $ora_conn->fetch($stid);
-
+		$result = $ora_conn->fetchAll($stid);
+		
 		$this->assertNotEmpty($result);
 		$this->assertInternalType('array', $result);
 
