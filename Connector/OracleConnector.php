@@ -159,6 +159,13 @@ class OracleConnector implements ConnectorInterface {
 		return oci_fetch_array($stid, $type);
 	}
 
+	public function fetchAll($stid, $type = OCI_FETCHSTATEMENT_BY_ROW) {
+		if (empty($stid)) throw new DataSourceException\StatementException();
+
+		$nrows = oci_fetch_all($stid, $res, 0, -1, $type);
+		return $res;
+	}
+
 
 
 }
