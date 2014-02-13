@@ -12,7 +12,9 @@ class DboSource implements ConnectorInterface {
 	private static $_instance = null;
 
 	public function __construct($dataSource = null) {
-		if (!empty($dataSource['connector']) && $dataSource['connector'] != '') $this->setConnector($connector);
+		if (!empty($dataSource['connector']) && $dataSource['connector'] != '') {
+			$this->setConnector($dataSource['connector']);
+		} 
 	}
 
 	public static function connect($dataSource = null) {
@@ -25,10 +27,15 @@ class DboSource implements ConnectorInterface {
 	}
 
 	public function setConnector($connector) {
-		$ns = __NAMESPACE__;
-		$cn = ucfirst($connector).'Connector';
-		$this->_connector = new $ns.'\\'.'Connector'.'\\'.$cn();
-
+		try {
+			$ns = __NAMESPACE__;
+			$cn = ucfirst($connector).'Connector';
+			$ns_class_name = $ns.'\\'.'Connector'.'\\'.$cn;
+			$this->_connector = new $ns_class_name();
+			//var_dump($this->_connector);exit;
+		} catch(Exception $e) {
+			//var_dump($e->getMessage());
+		}
 	}
 
 	public function getConnector() {
