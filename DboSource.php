@@ -28,13 +28,10 @@ class DboSource implements ConnectorInterface {
 
 	public function setConnector($connector) {
 		try {
-			$ns = __NAMESPACE__;
-			$cn = ucfirst($connector).'Connector';
-			$ns_class_name = $ns.'\\'.'Connector'.'\\'.$cn;
+			$ns_class_name = __NAMESPACE__.'\\'.'Connector'.'\\'.(ucfirst($connector).'Connector');
 			$this->_connector = new $ns_class_name();
-			//var_dump($this->_connector);exit;
 		} catch(Exception $e) {
-			//var_dump($e->getMessage());
+			var_dump($e->getMessage());
 		}
 	}
 
