@@ -1,9 +1,10 @@
 <?php
 namespace DataSource;
 
-use DataSource\ConnectorInterface;
+use DataSource\ConnectionInterface;
+use DataSource\Exception\ConnectorException;
 
-class DboSource implements ConnectorInterface {
+class DboSource implements ConnectionInterface {
 
 	private $_dataSource = array();
 
@@ -48,7 +49,7 @@ class DboSource implements ConnectorInterface {
 	 */
 	public function setConnector($connector) {
 		try {
-			if (is_array($connector) && count($connector) > 0) {
+			if (!empty($connector)) {
 				$ns_class_name = __NAMESPACE__.'\\'.'Connector'.'\\'.(ucfirst($connector).'Connector');
 				$this->_connector = new $ns_class_name();
 			} else throw new ConnectorException('Connector not found', 1001);
