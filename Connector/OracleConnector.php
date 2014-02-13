@@ -1,9 +1,10 @@
 <?php
 namespace DataSource\Connector;
 
+use DataSource\Connector\ConnectorInterface;
 use DataSource\Exception as DataSourceException;
 
-class OracleConnector {
+class OracleConnector implements ConnectorInterface {
 
 	private $_conn = null;
 
