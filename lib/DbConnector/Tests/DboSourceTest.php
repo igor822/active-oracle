@@ -67,4 +67,20 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf('ItemIterator\ItemIterator', $result);
 	}
 
+	public function testConnectorInstanceFromModel() {
+		$dbo_conn = new Model(array_merge(array('connector' => 'oracle'), self::$_dataSource));
+		$connector = $dbo_conn->getConnector();
+
+		//var_dump(get_class_methods($dbo_conn)); exit;
+
+		$this->assertInstanceOf('DbConnector\Connector\OracleConnector', $connector);
+		$this->assertTrue($connector->isConnected());
+
+		$result = $dbo_conn->fetch('select * from hr.regions');
+		$this->assertInternalType('array', $result);
+
+		$result = $dbo_conn->fetch('select * from hr.regions', 'object');
+		$this->assertInstanceOf('ItemIterator\ItemIterator', $result);
+	}
+
 }

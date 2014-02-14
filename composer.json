@@ -12,7 +12,17 @@
 	],
 	"license" : "MIT",
 	"require" : {
-		"php" : ">=5.4.0"
+		"php" : ">=5.4.0",
+		"igor822/item-iterator" : "dev-master"
+
 	},
-	"version" : "0.0.1"
+	"version" : "0.0.1",
+	"autoload" : {
+		"psr-0" : {
+			"DbConnector\\" : "lib/"
+		},
+		"classmap" : [
+			"lib/"
+		]
+	}
 }

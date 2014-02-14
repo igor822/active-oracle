@@ -84,8 +84,17 @@ class DboSource implements ConnectionInterface {
 		$result = $connector->fetchAll($stid);
 
 		$it = new ItemIterator($result);
-		if ($type == 'array') return $it->_toArray();
-		return $it;
+		$rs = null;
+		if ($type == 'array') $rs = $it->_toArray();
+		else $rs = $it;
+
+		$this->_afterFind($rs, $type);
+
+		return $rs;
+	}
+
+	public function _afterFind($result, $type_rs = 'array') {
+		if (method_exists($this, 'afterFind')) return $this->afterFind($result, $type_rs);
 	}
 
 }
