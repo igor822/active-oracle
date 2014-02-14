@@ -1,4 +1,4 @@
-# DataSource-Oracle
+# DbConnector
 
 This library allow you to connect with Oracle database without concern about all the oci_* functions
 
