@@ -70,6 +70,13 @@ class DboSource implements ConnectionInterface {
 		if (!empty($this->_connector)) return $this->_connector;
 	}
 
+	/**
+	 * Method to run query and fetch result object
+	 *
+	 * @param {string} Query to search
+	 * @return {array|object} $it Returns array or ItemIterator
+	 * @access public
+	 */
 	public function fetch($query, $type = 'array') {
 		$connector = $this->getConnector();
 		$stid = $connector->query($query);
