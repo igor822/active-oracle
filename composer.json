@@ -16,5 +16,13 @@
 		"igor822/item-iterator" : "dev-master"
 
 	},
-	"version" : "0.0.1"
+	"version" : "0.0.1",
+	"autoload" : {
+		"psr-0" : {
+			"DbConnector\\" : "lib/"
+		},
+		"classmap" : [
+			"lib/"
+		]
+	}
 }
