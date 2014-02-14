@@ -19,7 +19,7 @@ $connector = $dbo_conn->getConnector()->setDataSource($_dataSource)->openConnect
 To fetch results of some query
 
 ```php
-$query = 'select * from dual';
-$result = $connector->fetchAll($stid);
-print_r($result);
+// fetch() returns by default an array, if want, you can add a second parameter 'object' and return 
+// an object ItemIterator()
+$result = $dbo_conn->fetch('select * from dual');
 ```
