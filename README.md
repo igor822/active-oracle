@@ -12,7 +12,7 @@ $_dataSource = array(
 	'service' => '//localhost/XE',
 	'persistent' => true
 );
-$dbo_conn = DboSource::connect(array('connector' => 'oracle'));
+$dbo_conn = DbConnector\DboSource::connect(array('connector' => 'oracle'));
 $connector = $dbo_conn->getConnector()->setDataSource($_dataSource)->openConnection();
 ```
 

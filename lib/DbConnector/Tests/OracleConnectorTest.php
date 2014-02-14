@@ -1,7 +1,7 @@
 <?php
-namespace DataSource\Tests;
+namespace DbConnector\Tests;
 
-use DataSource\Connector\OracleConnector;
+use DbConnector\Connector\OracleConnector;
 
 require_once '../../autoload.php';
 
@@ -16,7 +16,7 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testIfInstanceOf() {
 		$ora_conn = OracleConnector::connect();
-		$this->assertInstanceOf('DataSource\Connector\OracleConnector', $ora_conn);
+		$this->assertInstanceOf('DbConnector\Connector\OracleConnector', $ora_conn);
 
 		return $ora_conn;
 	}

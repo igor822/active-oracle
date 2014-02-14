@@ -1,8 +1,8 @@
 <?php
-namespace DataSource\Connector;
+namespace DbConnector\Connector;
 
-use DataSource\Connector\ConnectorInterface;
-use DataSource\Exception as DataSourceException;
+use DbConnector\Connector\ConnectorInterface;
+use DbConnector\Exception as DataSourceException;
 
 class OracleConnector implements ConnectorInterface {
 

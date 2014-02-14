@@ -1,7 +1,7 @@
 <?php
-namespace DataSource\Tests;
+namespace DbConnector\Tests;
 
-use DataSource\DboSource;
+use DbConnector\DboSource;
 
 require_once '../../autoload.php';
 
@@ -20,10 +20,10 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testInstanceOf() {
 		$dbo = DboSource::connect();
-		$this->assertInstanceOf('DataSource\DboSource', $dbo);
+		$this->assertInstanceOf('DbConnector\DboSource', $dbo);
 
 		$dbo = new DboSource();
-		$this->assertInstanceOf('DataSource\DboSource', $dbo);
+		$this->assertInstanceOf('DbConnector\DboSource', $dbo);
 	}
 
 	/**
@@ -33,7 +33,7 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase {
 		$dbo_conn = DboSource::connect(array('connector' => 'oracle'));
 		$connector = $dbo_conn->getConnector();
 		
-		$this->assertInstanceOf('DataSource\Connector\OracleConnector', $connector);
+		$this->assertInstanceOf('DbConnector\Connector\OracleConnector', $connector);
 
 		return $connector;
 	}
@@ -41,7 +41,7 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @depends testInstanceOfConnector
 	 */
-	public function testQueryFromSourceGettingConnector(\DataSource\Connector\OracleConnector $connector = null) {
+	public function testQueryFromSourceGettingConnector(\DbConnector\Connector\OracleConnector $connector = null) {
 		$query = 'select * from dual';
 
 		$connector->setDataSource(self::$_dataSource)->openConnection();

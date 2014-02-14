@@ -1,5 +1,5 @@
 <?php
-namespace DataSource\Connector;
+namespace DbConnector\Connector;
 
 interface ConnectorInterface {
 

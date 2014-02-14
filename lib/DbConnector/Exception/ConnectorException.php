@@ -1,5 +1,5 @@
 <?php
-namespace DataSource\Exception;
+namespace DbConnector\Exception;
 
 class ConnectorException extends \Exception {
 

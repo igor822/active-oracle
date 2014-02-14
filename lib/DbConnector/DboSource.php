@@ -1,8 +1,8 @@
 <?php
-namespace DataSource;
+namespace DbConnector;
 
-use DataSource\ConnectionInterface;
-use DataSource\Exception\ConnectorException;
+use DbConnector\ConnectionInterface;
+use DbConnector\Exception\ConnectorException;
 
 class DboSource implements ConnectionInterface {
 
