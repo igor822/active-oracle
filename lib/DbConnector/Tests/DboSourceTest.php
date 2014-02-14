@@ -3,7 +3,8 @@ namespace DbConnector\Tests;
 
 use DbConnector\DboSource;
 
-require_once '../../autoload.php';
+//require_once '../../autoload.php';
+require_once '../../../vendor/autoload.php';
 
 class DboSourceTest extends \PHPUnit_Framework_TestCase {
 
@@ -26,9 +27,6 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf('DbConnector\DboSource', $dbo);
 	}
 
-	/**
-	 * 
-	 */
 	public function testInstanceOfConnector() {
 		$dbo_conn = DboSource::connect(array('connector' => 'oracle'));
 		$connector = $dbo_conn->getConnector();
@@ -52,6 +50,17 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase {
 		$result = $connector->fetchAll($stid);
 		
 		$this->assertNotEmpty($result);
+		$this->assertInternalType('array', $result);
+	}
+
+	public function testConnectorInstanceFromConnectSingleton() {
+		$dbo_conn = DboSource::connect(array_merge(array('connector' => 'oracle'), self::$_dataSource));
+		$connector = $dbo_conn->getConnector();
+
+		$this->assertInstanceOf('DbConnector\Connector\OracleConnector', $connector);
+		$this->assertTrue($connector->isConnected());
+
+		$result = $dbo_conn->fetch('select * from hr.regions');
 		$this->assertInternalType('array', $result);
 	}
 
