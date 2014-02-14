@@ -62,6 +62,9 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase {
 
 		$result = $dbo_conn->fetch('select * from hr.regions');
 		$this->assertInternalType('array', $result);
+
+		$result = $dbo_conn->fetch('select * from hr.regions', 'object');
+		$this->assertInstanceOf('ItemIterator\ItemIterator', $result);
 	}
 
 }
