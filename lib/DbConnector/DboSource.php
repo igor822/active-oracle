@@ -4,6 +4,8 @@ namespace DbConnector;
 use DbConnector\ConnectionInterface;
 use DbConnector\Exception\ConnectorException;
 
+use ItemIterator\ItemIterator;
+
 class DboSource implements ConnectionInterface {
 
 	private $_dataSource = array();
@@ -66,6 +68,17 @@ class DboSource implements ConnectionInterface {
 	 */
 	public function getConnector() {
 		if (!empty($this->_connector)) return $this->_connector;
+	}
+
+	public function fetch($query, $type = 'array') {
+		$connector = $this->getConnector();
+		$stid = $connector->query($query);
+
+		$result = $connector->fetchAll($stid);
+
+		$it = new ItemIterator($result);
+		if ($type == 'array') return $it->_toArray();
+		return $it;
 	}
 
 }
