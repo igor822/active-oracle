@@ -1,5 +1,5 @@
 {
-	"name" : "igor822/DbConnector",
+	"name" : "igor822/dbconnector",
 	"description" : "This library allow you to connect with Oracle database without concern about all the oci_* functions",
 	"type" : "library",
 	"authors" : [
