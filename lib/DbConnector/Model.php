@@ -1,5 +1,5 @@
 <?php
-namespace DbConnector\Tests;
+namespace DbConnector;
 
 use DbConnector\DboSource;
 
@@ -13,12 +13,12 @@ class Model extends DboSource {
 		return parent::connect($dataSource);
 	}
 
-	public function afterFind($result, $type) {
-		if ($type == 'object') $result = $type->_toArray();
+	public function afterFind($result = null, $type = 'array') {
 		foreach ($result as $row => $values) {
-			$result[$row]['REGION_NAME'] = $values['REGION_NAME'].' adadwdwdw';
+			$result[$row]['REGION_NAME'] = $values['REGION_NAME'].' dsfegreghrhrhrhrh';
 		}
 		return $result;
 	}
 
+	public function query($sql) {}
 }

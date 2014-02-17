@@ -2,6 +2,7 @@
 namespace DbConnector\Tests;
 
 use DbConnector\DboSource;
+use DbConnector\Model;
 
 //require_once '../../autoload.php';
 require_once '../../../vendor/autoload.php';
@@ -69,9 +70,7 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase {
 
 	public function testConnectorInstanceFromModel() {
 		$dbo_conn = new Model(array_merge(array('connector' => 'oracle'), self::$_dataSource));
-		$connector = $dbo_conn->getConnector();
-
-		//var_dump(get_class_methods($dbo_conn)); exit;
+		$connector = $dbo_conn->getConnector()->openConnection();
 
 		$this->assertInstanceOf('DbConnector\Connector\OracleConnector', $connector);
 		$this->assertTrue($connector->isConnected());
