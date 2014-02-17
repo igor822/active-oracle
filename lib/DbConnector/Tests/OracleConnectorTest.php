@@ -66,4 +66,16 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 
 	}
 
+	/**
+	 * @depends testCheckIfGetInstanceIsTheSame
+	 */
+	public function testSomeQueryInsert(OracleConnector $ora_conn = null) {
+		$query = 'insert into hr.regions (REGION_NAME) values (\'Teste 123\')';
+		$ora_conn->setDataSource(self::$_dataSource)->openConnection();
+
+		$rs = $ora_conn->query($query);
+
+		$this->assertNotEmpty($rs);
+	}
+
 }

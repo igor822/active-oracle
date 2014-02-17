@@ -4,6 +4,8 @@ namespace DbConnector;
 use DbConnector\ConnectionInterface;
 use DbConnector\Exception\ConnectorException;
 
+use ItemIterator\ItemIterator;
+
 class DboSource implements ConnectionInterface {
 
 	private $_dataSource = array();
@@ -19,6 +21,7 @@ class DboSource implements ConnectionInterface {
 	 * @return {object} instance of object
 	 */
 	public function __construct($dataSource = null) {
+		if (isset($dataSource['username'])) $this->_dataSource = $dataSource;
 		if (!empty($dataSource['connector']) && $dataSource['connector'] != '') {
 			$this->setConnector($dataSource['connector']);
 		} 
@@ -51,9 +54,9 @@ class DboSource implements ConnectionInterface {
 		try {
 			if (!empty($connector)) {
 				$ns_class_name = __NAMESPACE__.'\\'.'Connector'.'\\'.(ucfirst($connector).'Connector');
-				$this->_connector = new $ns_class_name();
+				$this->_connector = new $ns_class_name($this->_dataSource);
 			} else throw new ConnectorException('Connector not found', 1001);
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			var_dump($e->getMessage());
 		}
 		return $this;
@@ -66,6 +69,40 @@ class DboSource implements ConnectionInterface {
 	 */
 	public function getConnector() {
 		if (!empty($this->_connector)) return $this->_connector;
+	}
+
+	/**
+	 * Method to run query and fetch result object
+	 *
+	 * @param {string} Query to search
+	 * @return {array|object} $it Returns array or ItemIterator
+	 * @access public
+	 */
+	public function fetch($query, $type = 'array') {
+		$connector = $this->getConnector();
+		$stid = $connector->query($query);
+
+		$rs = $connector->fetchAll($stid);
+
+		$this->_call_event('afterFind', array(&$rs, $type));
+		if ($type == 'object') $rs = new ItemIterator($rs);
+
+		return $rs;
+	}
+
+	/**
+	 * Method to call child methods like callbacks
+	 *
+	 * @param {string} $name Name of event. Ex.: afterFind
+	 * @param {array} $params Parameters of method
+	 * @access protected
+	 * @return {array} Resultset
+	 */
+	protected function _call_event($name, $params = array()) {
+		if (method_exists($this, $name)) {
+			$params[0] = call_user_func_array(array($this, $name), $params);
+			return $params[0];
+		}
 	}
 
 }

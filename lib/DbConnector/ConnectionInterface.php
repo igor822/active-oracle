@@ -4,12 +4,12 @@ namespace DbConnector;
 interface ConnectionInterface {
 
 	public static function connect($dataSource);
+	
+	//protected function _call_event($name, $params = array());
 
-	/*public function query($sql);
+	//public function query($sql);
 
-	public function afterFind();
-
-	public function beforeFind();
+	/*public function beforeFind();
 
 	public function afterSave();
 
