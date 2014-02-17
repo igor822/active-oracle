@@ -90,7 +90,8 @@ class OracleConnector implements ConnectorInterface {
 
 			/*if ((empty($this->_dataSource['username']) && empty($this->_dataSource['password'])) || $this->_dataSource['service']) 
 				throw new DataSourceException\ConnectionException(array('message' => 'Missing connection data', 'code' => 1001));
-*/
+			*/
+				
 			$oci_conn = 'oci_connect';
 			if (!empty($this->_dataSource['persistent']) && $this->_dataSource['persistent'] === true) {
 				$oci_conn = 'oci_pconnect';
