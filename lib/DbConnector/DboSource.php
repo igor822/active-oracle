@@ -90,6 +90,14 @@ class DboSource implements ConnectionInterface {
 		return $rs;
 	}
 
+	/**
+	 * Method to call child methods like callbacks
+	 *
+	 * @param {string} $name Name of event. Ex.: afterFind
+	 * @param {array} $params Parameters of method
+	 * @access protected
+	 * @return {array} Resultset
+	 */
 	protected function _call_event($name, $params = array()) {
 		if (method_exists($this, $name)) {
 			$params[0] = call_user_func_array(array($this, $name), $params);
