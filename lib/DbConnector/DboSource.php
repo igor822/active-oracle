@@ -21,6 +21,7 @@ class DboSource implements ConnectionInterface {
 	 * @return {object} instance of object
 	 */
 	public function __construct($dataSource = null) {
+		if (isset($dataSource['username'])) $this->_dataSource = $dataSource;
 		if (!empty($dataSource['connector']) && $dataSource['connector'] != '') {
 			$this->setConnector($dataSource['connector']);
 		} 
@@ -53,9 +54,9 @@ class DboSource implements ConnectionInterface {
 		try {
 			if (!empty($connector)) {
 				$ns_class_name = __NAMESPACE__.'\\'.'Connector'.'\\'.(ucfirst($connector).'Connector');
-				$this->_connector = new $ns_class_name();
+				$this->_connector = new $ns_class_name($this->_dataSource);
 			} else throw new ConnectorException('Connector not found', 1001);
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			var_dump($e->getMessage());
 		}
 		return $this;
@@ -81,20 +82,19 @@ class DboSource implements ConnectionInterface {
 		$connector = $this->getConnector();
 		$stid = $connector->query($query);
 
-		$result = $connector->fetchAll($stid);
+		$rs = $connector->fetchAll($stid);
 
-		$it = new ItemIterator($result);
-		$rs = null;
-		if ($type == 'array') $rs = $it->_toArray();
-		else $rs = $it;
-
-		$this->_afterFind($rs, $type);
+		$this->_call_event('afterFind', array(&$rs, $type));
+		if ($type == 'object') $rs = new ItemIterator($rs);
 
 		return $rs;
 	}
 
-	public function _afterFind($result, $type_rs = 'array') {
-		if (method_exists($this, 'afterFind')) return $this->afterFind($result, $type_rs);
+	protected function _call_event($name, $params = array()) {
+		if (method_exists($this, $name)) {
+			$params[0] = call_user_func_array(array($this, $name), $params);
+			return $params[0];
+		}
 	}
 
 }
