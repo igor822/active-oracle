@@ -5,11 +5,11 @@ interface ConnectionInterface {
 
 	public static function connect($dataSource);
 	
-	public function _afterFind($result);
+	public function _call_event($name, $params = array());
 
-	/*public function query($sql);
+	//public function query($sql);
 
-	public function beforeFind();
+	/*public function beforeFind();
 
 	public function afterSave();
 
