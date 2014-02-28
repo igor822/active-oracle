@@ -10,9 +10,9 @@ require_once '../../../vendor/autoload.php';
 class DboSourceTest extends \PHPUnit_Framework_TestCase {
 
 	protected static $_dataSource = array(
-		'username' => 'hr',
-		'password' => 'root',
-		'service' => '//localhost:1521',
+		'username' => 'aplbradppf',
+		'password' => '4pl1n1c0',
+		'service' => 'CAMP2',
 		'persistent' => true
 	);
 
