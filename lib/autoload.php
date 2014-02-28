@@ -1,6 +1,10 @@
 <?php
 if (!defined('BASE_PATH')) define('BASE_PATH', realpath(dirname(__FILE__)));
 
+putenv('ORACLE_HOME=/usr/lib/oracle/11.2/client64');
+putenv('LD_LIBRARY_PATH=/usr/lib/oracle/11.2/client64/lib');
+putenv('TNS_ADMIN=/usr/lib/oracle/11.2/client64/network/admin');
+
 function autoloader($class_name) {
 	if (strpos($class_name, 'PHPUnit') !== false) return false;
 	$class_name = ltrim($class_name, '\\');
