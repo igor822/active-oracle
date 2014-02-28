@@ -105,4 +105,16 @@ class DboSource implements ConnectionInterface {
 		}
 	}
 
+	/**
+	 * Fetch last id added to new record.
+	 *
+	 * @param {string} $tableName Name of table to fetch last id
+	 * @param {string} $fieldName Name of field considered primary key
+	 * @return array
+	 */
+	public function lastInsertId($tableName, $fieldName) {
+		$query = 'select max('.$tableName.') as last_id from '.$fieldName;
+		return $this->fetch($query);
+	}
+
 }
