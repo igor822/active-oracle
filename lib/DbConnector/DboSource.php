@@ -78,16 +78,21 @@ class DboSource implements ConnectionInterface {
 	 * @return {array|object} $it Returns array or ItemIterator
 	 * @access public
 	 */
-	public function fetch($query, $type = 'array') {
+	public function fetch($query, $type = 'array', $return = 'one') {
 		$connector = $this->getConnector();
 		$stid = $connector->query($query);
 
-		$rs = $connector->fetchAll($stid);
+		if ($return = 'all') $rs = $connector->fetchAll($stid);
+		else $rs = $connector->fetch($stid);
 
 		$this->_call_event('afterFind', array(&$rs, $type));
 		if ($type == 'object') $rs = new ItemIterator($rs);
 
 		return $rs;
+	}
+
+	public function fetchAll($query, $type = 'array') {
+		return $this->fetch($query, $type, 'all');
 	}
 
 	/**
