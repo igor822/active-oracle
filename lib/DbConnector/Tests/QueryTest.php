@@ -19,16 +19,15 @@ class QueryTest extends \PHPUnit_Framework_TestCase {
 	 * @depends testQueryInstance
 	 */
 	public function testBuildSimpleSelect(\DbConnector\Query\Query $query) {
-		$query->where('a = ? and aaa = ?', array("fff", 1));
-		$query->select('a, b');
-		$query->where('a = ?', array('fffaaa'));
+		$query->select('a, b')
+			  ->where('a = ? and aaa = ?', array("fff", 1))
+			  ->where('a = ?', array('fffaaa'));
 		
 		$query->joinAll();
 
 		$sql = $query->getSql();
 
 		$q = 'SELECT a, b FROM regions REGIONS WHERE (a = \'fff\' and aaa = 1) AND (a = \'fffaaa\')';
-		echo($query);
 
 		$this->assertEquals($q, $sql);
 	}
