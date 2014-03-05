@@ -109,7 +109,7 @@ class OracleConnector implements ConnectorInterface {
 			}
 
 		} catch(DataSourceException\ConnectionException $e) {
-			var_dump($e->getMessage());
+			$e->getMessage();
 		} catch (\Exception $e) {
 			$e->getMessage();
 		}
@@ -150,7 +150,7 @@ class OracleConnector implements ConnectorInterface {
 	}
 
 	public function query($query) {
-		if (!$this->isConnected()) throw new DataSourceException\ConnectionException();
+		if (!$this->isConnected()) throw new DataSourceException\ConnectionException(array('message' => 'Connector is not connected', 'code' => 500));
 		$stid = oci_parse($this->_conn, $query);
 		oci_execute($stid);
 

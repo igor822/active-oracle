@@ -9,14 +9,10 @@ require_once '../../autoload.php';
 class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 
 	protected static $_dataSource = array(
-		/*'username' => 'hr',
+		'username' => 'hr',
 		'password' => 'root',
 		'service' => '//localhost:1521',
-		'persistent' => true,*/
-		'username' => 'aplbradppf',
-		'password' => '4pl1n1c0',
-		'service' => 'CAMP2',
-		'persistent' => true
+		'persistent' => true,
 	);
 
 	public function testIfInstanceOf() {
@@ -57,7 +53,7 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 	 * @depends testCheckIfGetInstanceIsTheSame
 	 */
 	public function testSomeQuery(OracleConnector $ora_conn = null) {
-		$query = 'select * from usuarios where rownum < 10';
+		$query = 'select * from dual where rownum < 10';
 
 		$ora_conn->setDataSource(self::$_dataSource)->openConnection();
 		$stid = $ora_conn->query($query);
@@ -65,24 +61,10 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertNotEmpty($stid);
 
 		$result = $ora_conn->fetchAll($stid);
-		var_dump($result);
 		
 		$this->assertNotEmpty($result);
 		$this->assertInternalType('array', $result);
 
-	}
-
-	/**
-	 * @depends testCheckIfGetInstanceIsTheSame
-	 */
-	public function testSomeQueryInsert(OracleConnector $ora_conn = null) {
-		return;
-		$query = 'insert into hr.regions (REGION_NAME) values (\'Teste 123\')';
-		$ora_conn->setDataSource(self::$_dataSource)->openConnection();
-
-		$rs = $ora_conn->query($query);
-
-		$this->assertNotEmpty($rs);
 	}
 
 }
