@@ -20,6 +20,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testBuildSimpleSelect(\DbConnector\Query\Query $query) {
 		$query->select('a, b')
+			  ->join('test t', 't.a = a.a')
 			  ->where('a = ? and aaa = ?', array("fff", 1))
 			  ->where('a = ?', array('fffaaa'));
 		
