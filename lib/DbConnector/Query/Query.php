@@ -26,7 +26,6 @@ class Query implements QueryInterface {
 	}
 
 	public function select($fields = '*') {
-		//$this->sql .= 'SELECT '.$fields;
 		$sql = 'SELECT '.$fields;
 		$this->parts['select'] = $sql;
 		$this->from();
@@ -35,42 +34,38 @@ class Query implements QueryInterface {
 
 	public function from($table = null) {
 		if ($table !== null) $this->table = $table;
-		//$this->sql .= ' FROM '.$this->table.' '.strtoupper($this->table);
 		$sql = ' FROM '.$this->table.' '.strtoupper($this->table);
 		$this->parts['from'] = $sql;
 
 		return $this;
 	}
 
-	public function where($condition, $params) {
-		$this->replaceFields($condition, $params);
-		//$this->sql .= (strpos($this->sql, 'WHERE') !== false ? ' AND ' : ' WHERE ').'('.$condition.')';
+	public function where($condition, $params = array()) {
+		if (count($params) > 0) $this->replaceFields($condition, $params);
 		$sql = (count($this->parts['where']) > 0 ? ' AND ' : ' WHERE ').'('.$condition.')';
 		$this->parts['where'][] = $sql;
 		return $this;
 	}
 
-	public function join($table, $on, $type = 'inner') {
-		$joinStr = strtoupper($type).' JOIN '.$table.' '.strtoupper($table).' ON '.$on;
-		$this->sql .= $joinStr;
-		return $this;
-	}
 
-	public function orWhere($condition) {
-		$this->replaceFields($condition, $params);
-		//$this->sql .= (strpos($this->sql, 'WHERE') !== false ? ' OR ' : ' WHERE ').'('.$condition.')';
+	public function orWhere($condition, $params = array()) {
+		if (count($params) > 0) $this->replaceFields($condition, $params);
 		$sql = (count($this->parts['where']) > 0 ? ' OR ' : ' WHERE ').'('.$condition.')';
 		return $this;
 	}
 
+	public function join($table, $on, $type = 'inner') {
+		$joinStr = strtoupper($type).' JOIN '.$table.' '.strtoupper($table).' ON '.$on;
+		$this->parts['join'][] = $joinStr;
+		return $this;
+	}
+
 	public function order($order) {
-		//$this->sql .= ' ORDER '.$order;
 		$this->parts['order'] = ' ORDER '.$order;
 		return $this;
 	}
 
 	public function group($group) {
-		//$this->sql .= ' GROUP BY '.$group;
 		$this->parts['group'] = ' GROUP BY '.$group;
 		return $this;
 	}
