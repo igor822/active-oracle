@@ -14,8 +14,8 @@ class Query implements QueryInterface {
 	private $parts = array(
 		'select' => '',
 		'from' => '',
-		'where' => array(),
 		'join' => array(),
+		'where' => array(),
 		'order' => '',
 		'group' => ''
 	);
@@ -55,7 +55,12 @@ class Query implements QueryInterface {
 	}
 
 	public function join($table, $on, $type = 'inner') {
-		$joinStr = strtoupper($type).' JOIN '.$table.' '.strtoupper($table).' ON '.$on;
+		if (is_array($table)) list($alias, $table) = $table;
+		else {
+			if (strpos($table, ' ') !== false) list($table, $alias) = explode(' ', $table);
+			else $alias = $table;
+		}
+		$joinStr = ' '.strtoupper($type).' JOIN '.$table.' '.$alias.' ON '.$on;
 		$this->parts['join'][] = $joinStr;
 		return $this;
 	}
