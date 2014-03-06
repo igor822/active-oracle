@@ -95,6 +95,21 @@ class DboSource implements ConnectionInterface {
 		return $this->fetch($query, $type, 'all');
 	}
 
+	public function execute($query) {
+		try {
+			$connector = $this->getConnector()->openConnection();
+			$stid = $connector->query($query);
+			$connector->clearStatement($stid);
+		} catch (ConnectorException $e) {
+			var_dump($e->getMessage());
+		} catch (\Exception $e) {
+			var_dump($e->getMessage());
+		} 
+
+		if ($stid) return true;
+		return false;
+	}
+
 	/**
 	 * Method to call child methods like callbacks
 	 *
