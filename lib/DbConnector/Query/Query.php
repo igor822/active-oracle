@@ -192,18 +192,23 @@ class Query implements QueryInterface {
 	/**
 	 * Method to implode recursively
 	 *
-	 * @access private
+	 * @access protected
 	 * @param {string} $glue Delimiter to glue for
 	 * @param {array} $array to implode
 	 * @return string
 	 */ 
-	private function implode_r($glue, $array) {
+	protected function implode_r($glue, $array) {
 		$ret = '';
 		foreach ($array as $item) {
 			$ret .= $glue.(is_array($item) ? $this->implode_r($glue, $item) : $item);
 		}
 		unset($array);
 		return $ret;
+	}
+
+	public function fetchPart($part = '') {
+		if (!empty($this->parts[$part])) return $this->parts[$part];
+		return null;
 	}
 
 	public function __toString() {
