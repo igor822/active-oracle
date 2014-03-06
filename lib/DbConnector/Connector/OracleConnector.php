@@ -12,6 +12,8 @@ class OracleConnector implements ConnectorInterface {
 
 	private $_dataSource = null;
 
+	private $_stid = null;
+
 	private static $_instance;
 
 	/**
@@ -152,24 +154,35 @@ class OracleConnector implements ConnectorInterface {
 	public function query($query) {
 		if (!$this->isConnected()) throw new DataSourceException\ConnectionException(array('message' => 'Connector is not connected', 'code' => 500));
 		$stid = oci_parse($this->_conn, $query);
-		oci_execute($stid);
+		
+		oci_execute($stid, OCI_COMMIT_ON_SUCCESS);
+		oci_commit($this->_conn);
 
 		return $stid;
 	}
 
+	public function clearStatement($stid) {
+		oci_free_statement($stid);
+	}
+
 	public function fetch($stid, $type = OCI_ASSOC) {
 		if (empty($stid)) throw new DataSourceException\StatementException();
-
-		return oci_fetch_array($stid, $type);
+		$res = oci_fetch_array($stid, $type);
+		oci_free_statement($stid);
+		return $res;
 	}
 
 	public function fetchAll($stid, $type = OCI_FETCHSTATEMENT_BY_ROW) {
 		if (empty($stid)) throw new DataSourceException\StatementException();
 
 		$nrows = oci_fetch_all($stid, $res, 0, -1, $type);
+		oci_free_statement($stid);
 		return $res;
 	}
 
-
+	public function __destruct() {
+		//oci_free_statement($this->_stid);
+		oci_close($this->_conn);
+	}
 
 }
