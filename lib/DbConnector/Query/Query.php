@@ -3,9 +3,9 @@ namespace DbConnector\Query;
 
 class Query implements QueryInterface {
 
-	private $sql = null;
+	protected $sql = null;
 
-	private $source = null;
+	protected $source = null;
 
 	protected $table = null;
 
