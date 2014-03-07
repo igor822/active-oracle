@@ -5,6 +5,7 @@ use DbConnector\DboSource;
 use DbConnector\Query\Query;
 use DbConnector\Query\Insert;
 use DbConnector\Query\Update;
+use DbConnector\Query\Delete;
 
 class Model extends DboSource {
 
@@ -18,16 +19,21 @@ class Model extends DboSource {
 
 	protected $updateAdp = null;
 
+	protected $deleteAdp = null;
+
 	protected $alias = null;
+
+	private $sourceModel = array();
 
 	public function __construct($dataSource) {
 		parent::__construct($dataSource);
 		$this->connector = $this->getConnector()->openConnection();
+		$this->sourceModel = array('table' => $this->table, 'alias' => $this->alias);
 		$this->getQueryAdp();
 	}
 
 	public function getQueryAdp() {
-		if ($this->queryAdp === null) $this->queryAdp = new Query(array('table' => $this->table, 'alias' => $this->alias));
+		if ($this->queryAdp === null) $this->queryAdp = new Query($this->sourceModel);
 		return $this->queryAdp;
 	}
 
@@ -86,7 +92,7 @@ class Model extends DboSource {
 	 * @return boolean
 	 */ 
 	public function insert($values) {
-		if (null === $this->insertAdp) $this->insertAdp = new Insert(array('table' => $this->table, 'alias' => $this->alias));
+		if (null === $this->insertAdp) $this->insertAdp = new Insert($this->sourceModel);
 		$this->insertAdp->createQuery($values);
 		$sql = $this->insertAdp->getSql();
 		return $this->execute($sql);
@@ -100,7 +106,7 @@ class Model extends DboSource {
 	 * @return boolean
 	 */
 	public function update($values, $options = array()) {
-		if (null === $this->updateAdp) $this->updateAdp = new Update(array('table' => $this->table, 'alias' => $this->alias));
+		if (null === $this->updateAdp) $this->updateAdp = new Update($this->sourceModel);
 
 		$this->updateAdp->setValues($values);
 
@@ -109,6 +115,16 @@ class Model extends DboSource {
 		}
 		$sql = $this->updateAdp->createQuery()->getSql();
 		//echo $sql; exit;
+		return $this->execute($sql);
+	}
+
+	public function delete($options = array()) {
+		if (null === $this->deleteAdp) $this->deleteAdp = new Delete($this->sourceModel);
+		if (count($options) > 0) {
+			$this->buildQuery($options, $this->deleteAdp);
+		}
+
+		$sql = $this->deleteAdp->createQuery()->getSql();
 		return $this->execute($sql);
 	}
 }
