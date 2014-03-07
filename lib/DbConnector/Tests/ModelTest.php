@@ -11,8 +11,17 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
 		'username' => 'hr',
 		'password' => 'root',
 		'service' => '//localhost:1521',
-		'persistent' => true
+		/*'username' => 'aplciticap',
+		'password' => '4pl1n1c0',
+		'service' => 'SRV_OI',*/
+		'persistent' => false
 	);
+
+	protected $regionModel;
+
+	protected function setUp() {
+		$this->regionModel = new Model\Region(array_merge(array('connector' => 'oracle'), self::$_dataSource));
+	}
 
 	public function testConnectorInstanceFromModel() {
 		$dbo_conn = new Model\Model(array_merge(array('connector' => 'oracle'), self::$_dataSource));
@@ -33,9 +42,16 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertInstanceOf('DbConnector\Model\Region', $region);
 
-		$result = $region->find('first');
-		//var_dump($region->getQueryAdp()->getSql());
-		var_dump($result);
+		$result = $region->find('first', array('conditions' => array('region_id = 4')));
+		
+		$this->assertInternalType('array', $result);
+	}
+
+	public function testInsertQueryByModel() {
+		$sql = $this->regionModel->insert(array('REGION_ID' => 12, 'REGION_NAME' => 'abc'));
+		$sql = $this->regionModel->update(array('region_name' => 'bbbb'), array('conditions' => array('region_id = 10')));
+		
+		$this->assertTrue($sql);
 	}
 
 }
