@@ -25,7 +25,7 @@ class Insert extends Query implements InsertInterface {
 		foreach ($fields as $field) {
 			$field_str .= ($field_str != '' ? ', ' : '').$field;
 
-			if (is_string($this->values[$field])) $value = '"'.$this->values[$field].'"';
+			if (is_string($this->values[$field])) $value = "'".$this->values[$field]."'";
 			else $value = $this->values[$field];
 
 			$value_str .= ($value_str != '' ? ', ' : '').$value;
