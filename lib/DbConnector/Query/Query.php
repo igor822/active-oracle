@@ -9,6 +9,8 @@ class Query implements QueryInterface {
 
 	protected $table = null;
 
+	protected $alias = null;
+
 	private $from = null;
 
 	private $parts = array(
@@ -23,6 +25,7 @@ class Query implements QueryInterface {
 	public function __construct($source) {
 		$this->source = $source;
 		$this->table = ($source['table'] != '' ? $source['table'] : '');
+		$this->alias = ($source['alias'] != '' ? $source['alias'] : '');
 	}
 
 	/**
@@ -48,7 +51,8 @@ class Query implements QueryInterface {
 	 */
 	public function from($table = null) {
 		if ($table !== null) $this->table = $table;
-		$sql = ' FROM '.$this->table.' '.strtoupper($this->table);
+		$alias = (!empty($this->alias) ? $this->alias : strtoupper($this->table));
+		$sql = ' FROM '.$this->table.' '.$alias;
 		$this->parts['from'] = $sql;
 
 		return $this;
