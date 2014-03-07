@@ -7,6 +7,8 @@ class Region extends Model {
 
 	protected $table = 'regions';
 
+	protected $alias = 'p';
+
 	public function __construct($dsorce) {
 		parent::__construct($dsorce);
 	}
