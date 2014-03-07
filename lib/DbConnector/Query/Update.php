@@ -1,7 +1,7 @@
 <?php
 namespace DbConnector\Query;
 
-class Update extends Query implements UpdateInterface {
+class Update extends Query implements StatementInterface {
 
 	private $values = null;
 
@@ -18,7 +18,7 @@ class Update extends Query implements UpdateInterface {
 		return $this;
 	}
 
-	public function createQuery($values = array(), $options = array()) {
+	public function createQuery($values = array()) {
 		if (count($values) > 0) $this->values = $values;
 		$up_field = '';
 		$fields = array_keys($this->values);

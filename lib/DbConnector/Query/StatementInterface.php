@@ -1,7 +1,7 @@
 <?php
 namespace DbConnector\Query;
 
-interface InsertInterface {
+interface StatementInterface {
 
 	public function getSql();
 

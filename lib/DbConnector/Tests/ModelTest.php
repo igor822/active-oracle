@@ -24,7 +24,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testConnectorInstanceFromModel() {
-		$dbo_conn = new Model\Model(array_merge(array('connector' => 'oracle'), self::$_dataSource));
+		$dbo_conn = new Model\Region(array_merge(array('connector' => 'oracle'), self::$_dataSource));
 		$connector = $dbo_conn->getConnector()->openConnection();
 		
 		$this->assertInstanceOf('DbConnector\Connector\OracleConnector', $connector);
@@ -50,7 +50,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
 	public function testInsertQueryByModel() {
 		$sql = $this->regionModel->insert(array('REGION_ID' => 12, 'REGION_NAME' => 'abc'));
 		$sql = $this->regionModel->update(array('region_name' => 'bbbb'), array('conditions' => array('region_id = 10')));
-		
+		$sql = $this->regionModel->delete(array('conditions' => array('region_id = 12')));
 		$this->assertTrue($sql);
 	}
 
