@@ -21,7 +21,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
 		$this->regionModel = new Model\Region(self::$_dataSource);
 	}
 
-	/*public function testConnectorInstanceFromModel() {
+	public function testConnectorInstanceFromModel() {
 		$dbo_conn = new Model\Region(self::$_dataSource);
 		$connector = $dbo_conn->getConnector()->openConnection();
 		//var_dump($dbo_conn->getConnector()->openConnection()); 
@@ -44,12 +44,13 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
 		$result = $region->find('first', array('conditions' => array('region_id = 4')));
 		
 		$this->assertInternalType('array', $result);
-	}*/
+	}
 
-	public function testInsertQueryByModel() {
-		$sql = $this->regionModel->insert(array('REGION_ID' => 12, 'REGION_NAME' => 'abc'), array('returning' => 'REGION_ID'));
-		$sql = $this->regionModel->update(array('region_name' => 'bbbb'), array('conditions' => array('region_id = 10')));
-		$sql = $this->regionModel->delete(array('conditions' => array('region_id = 12')));
-		$this->assertTrue($sql);
+	public function testExpression() {
+		$expr = new \DbConnector\DboExpression('aaaaa');
+
+		$this->assertInstanceOf('DbConnector\DboExpression', $expr);
+
+		$this->assertEquals('aaaaa', $expr->getValue());
 	}
 }
