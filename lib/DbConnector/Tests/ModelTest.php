@@ -52,5 +52,4 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
 		$sql = $this->regionModel->delete(array('conditions' => array('region_id = 12')));
 		$this->assertTrue($sql);
 	}
-
 }
