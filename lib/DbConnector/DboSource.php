@@ -1,12 +1,11 @@
 <?php
 namespace DbConnector;
 
-use DbConnector\ConnectionInterface;
 use DbConnector\Exception\ConnectorException;
 
 use ItemIterator\ItemIterator;
 
-class DboSource implements ConnectionInterface {
+class DboSource {
 
 	private $_dataSource = array();
 

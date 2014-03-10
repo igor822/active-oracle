@@ -26,6 +26,7 @@ class Insert extends Query implements StatementInterface {
 			$field_str .= ($field_str != '' ? ', ' : '').$field;
 
 			if (is_string($this->values[$field])) $value = "'".$this->values[$field]."'";
+			else if ($this->values[$field] instanceof DbConnector\DbExpression) $value = $this->values[$field]->getValue(); 
 			else $value = $this->values[$field];
 
 			$value_str .= ($value_str != '' ? ', ' : '').$value;
