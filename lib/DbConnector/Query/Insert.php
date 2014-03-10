@@ -1,7 +1,7 @@
 <?php
 namespace DbConnector\Query;
 
-class Insert extends Query implements InsertInterface {
+class Insert extends Query implements StatementInterface {
 
 	private $values = null;
 
@@ -30,7 +30,10 @@ class Insert extends Query implements InsertInterface {
 
 			$value_str .= ($value_str != '' ? ', ' : '').$value;
 		}
-		$this->sql = 'INSERT INTO '.$this->table.' ('.$field_str.') VALUES ('.$value_str.')';
+
+ 		$this->sql = 'INSERT INTO '.$this->table.' ('.$field_str.') VALUES ('.$value_str.')';
+		
+		if ($returning = $this->fetchPart('returning')) $this->sql .= ' '.$returning;
 		return $this;
 	}
 

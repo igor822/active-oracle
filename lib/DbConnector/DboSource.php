@@ -95,7 +95,7 @@ class DboSource implements ConnectionInterface {
 		return $this->fetch($query, $type, 'all');
 	}
 
-	public function execute($query) {
+	public function query($query) {
 		try {
 			$connector = $this->getConnector()->openConnection();
 			$stid = $connector->query($query);
@@ -108,6 +108,18 @@ class DboSource implements ConnectionInterface {
 
 		if ($stid) return true;
 		return false;
+	}
+
+	public function prepare($query) {
+		$connector = $this->getConnector()->openConnection();
+		$stid = $connector->prepare($query);
+		return $stid;
+	}
+
+	public function execute($stid) {
+		$connector = $this->getConnector()->openConnection();
+		$rs = $connector->execute($stid);
+		return $rs;
 	}
 
 	/**

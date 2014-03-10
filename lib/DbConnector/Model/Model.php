@@ -25,6 +25,8 @@ class Model extends DboSource {
 
 	private $sourceModel = array();
 
+	public $id = null;
+
 	public function __construct($dataSource) {
 		parent::__construct($dataSource);
 		$this->connector = $this->getConnector()->openConnection();
@@ -55,6 +57,9 @@ class Model extends DboSource {
 		if (!empty($options['conditions'])) $this->buildConditions($options['conditions'], $adapter);
 		if (!empty($options['order'])) $adapter->order($options['order']);
 		if (!empty($options['group'])) $adapter->group($options['group']);
+		if (!empty($options['returning'])) {
+			$adapter->returning($options['returning']);
+		} 
 	}
 
 	/**
@@ -91,11 +96,17 @@ class Model extends DboSource {
 	 * @param {array} $values Values to be added to table
 	 * @return boolean
 	 */ 
-	public function insert($values) {
+	public function insert($values, $options = array()) {
 		if (null === $this->insertAdp) $this->insertAdp = new Insert($this->sourceModel);
+		if (count($options) > 0) {
+			$this->buildQuery($options, $this->insertAdp);
+		}
 		$this->insertAdp->createQuery($values);
 		$sql = $this->insertAdp->getSql();
-		return $this->execute($sql);
+
+		$stid = $this->prepare($sql);
+		$this->connector->bindParam($stid, 'id', $this->id);
+		return $this->execute($stid);
 	}
 
 	/**
@@ -115,7 +126,7 @@ class Model extends DboSource {
 		}
 		$sql = $this->updateAdp->createQuery()->getSql();
 		//echo $sql; exit;
-		return $this->execute($sql);
+		return $this->query($sql);
 	}
 
 	public function delete($options = array()) {
@@ -125,6 +136,6 @@ class Model extends DboSource {
 		}
 
 		$sql = $this->deleteAdp->createQuery()->getSql();
-		return $this->execute($sql);
+		return $this->query($sql);
 	}
 }
