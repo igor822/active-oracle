@@ -19,7 +19,8 @@ class Query implements QueryInterface {
 		'join' => array(),
 		'where' => array(),
 		'order' => '',
-		'group' => ''
+		'group' => '',
+		'returning' => '',
 	);
 
 	public function __construct($source) {
@@ -128,6 +129,11 @@ class Query implements QueryInterface {
 	 */
 	public function group($group) {
 		$this->parts['group'] = ' GROUP BY '.$group;
+		return $this;
+	}
+
+	public function returning($id) {
+		$this->parts['returning'] = ' RETURNING '.$id.' INTO :id';
 		return $this;
 	}
 

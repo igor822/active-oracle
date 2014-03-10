@@ -16,6 +16,10 @@ class OracleConnector implements ConnectorInterface {
 
 	private static $_instance;
 
+	const PARAM_CHR = SQLT_CHR;
+
+	const PARAM_INT = SQLT_INT;
+
 	/**
 	 * Constructor
 	 *
@@ -90,14 +94,17 @@ class OracleConnector implements ConnectorInterface {
 	public function openConnection() {
 		try {
 
-			/*if ((empty($this->_dataSource['username']) && empty($this->_dataSource['password'])) || $this->_dataSource['service']) 
+			if ($this->_conn !== null) return $this;
+
+			if (empty($this->_dataSource['username']) && empty($this->_dataSource['password'])) { 
 				throw new DataSourceException\ConnectionException(array('message' => 'Missing connection data', 'code' => 1001));
-			*/
-				
+			}
+							
 			$oci_conn = 'oci_connect';
 			if (!empty($this->_dataSource['persistent']) && $this->_dataSource['persistent'] === true) {
 				$oci_conn = 'oci_pconnect';
 			}
+
 			$this->_conn = $oci_conn(
 								$this->_dataSource['username'], 
 								$this->_dataSource['password'], 
@@ -111,9 +118,9 @@ class OracleConnector implements ConnectorInterface {
 			}
 
 		} catch(DataSourceException\ConnectionException $e) {
-			$e->getMessage();
+			var_dump($e->getMessage());
 		} catch (\Exception $e) {
-			$e->getMessage();
+			var_dump($e->getMessage());
 		}
 		return $this;
 	}
@@ -151,6 +158,17 @@ class OracleConnector implements ConnectorInterface {
 		}
 	}
 
+	public function prepare($query) {
+		if (!$this->isConnected()) throw new DataSourceException\ConnectionException(array('message' => 'Connector is not connected', 'code' => 500));
+		$stid = oci_parse($this->_conn, $query);
+		return $stid;
+	}
+
+	public function execute($stid) {
+		if (!$stid) return null;
+		return oci_execute($stid);
+	}
+
 	public function query($query) {
 		if (!$this->isConnected()) throw new DataSourceException\ConnectionException(array('message' => 'Connector is not connected', 'code' => 500));
 		$stid = oci_parse($this->_conn, $query);
@@ -181,8 +199,13 @@ class OracleConnector implements ConnectorInterface {
 	}
 
 	public function __destruct() {
-		//oci_free_statement($this->_stid);
-		oci_close($this->_conn);
+		if (!empty($this->_conn)) oci_close($this->_conn);
+	}
+
+	public function bindParam($stid, $pname, &$variable, $type = SQLT_INT) {
+		var_dump($pname);
+		oci_bind_by_name($stid, ':'.$pname, $variable, -1, $type);
+		return $this;
 	}
 
 }
