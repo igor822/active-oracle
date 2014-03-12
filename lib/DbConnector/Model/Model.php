@@ -121,7 +121,7 @@ class Model extends DboSource {
 		$sql = $this->insertAdp->getSql();
 
 		$stid = $this->prepare($sql);
-		if ($options['returning']) $this->connector->bindParam($stid, 'id', $this->id);
+		if (!empty($options['returning'])) $this->connector->bindParam($stid, 'id', $this->id);
 		return $this->execute($stid);
 	}
 
