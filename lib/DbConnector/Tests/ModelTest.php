@@ -52,5 +52,12 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf('DbConnector\DboExpression', $expr);
 
 		$this->assertEquals('aaaaa', $expr->getValue());
+
+		$sql = $this->regionModel->getQueryAdp()
+								 ->select()
+								 ->where('a = ?', array(new \DbConnector\DboExpression('count(*)')))
+								 ->getSql();
+
+		$this->assertEquals('SELECT * FROM regions p WHERE (a = count(*))', $sql);
 	}
 }

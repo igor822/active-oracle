@@ -158,8 +158,9 @@ class Query implements QueryInterface {
 	protected function quote($value) {
 		if (is_int($value)) return $value;
 		else if (is_float($value)) return sprintf('%F', $value);
+		else if (is_string($value)) return "'".addcslashes($value, "\000\n\r\\'\"\032")."'";
 
-		return "'".addcslashes($value, "\000\n\r\\'\"\032")."'";
+		return $value;
 	}
 
 	/**
@@ -191,6 +192,7 @@ class Query implements QueryInterface {
 				sort($matches);
 				for ($i = 0; $i < count($matches[0]); $i++) {
 					$param = !empty($params[$i]) ? $params[$i] : $params[count($params) - 1];
+					if ($param instanceof \DbConnector\DboExpression) $param = $param->getValue(); 
 					$offset = 1;
 					$condition = preg_replace('/(\?)/', $param, $condition, 1);
 				}
