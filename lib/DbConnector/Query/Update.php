@@ -24,6 +24,7 @@ class Update extends Query implements StatementInterface {
 		$fields = array_keys($this->values);
 		foreach ($fields as $field) {
 			if (is_string($this->values[$field])) $value = "'".$this->values[$field]."'";
+			else if ($this->values[$field] instanceof \DbConnector\DboExpression) $value = $this->values[$field]->getValue(); 
 			else $value = $this->values[$field];
 
 			$up_field .= ($up_field != '' ? ', ' : '').$field.' = '.$value;
