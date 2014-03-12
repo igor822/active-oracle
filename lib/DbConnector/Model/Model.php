@@ -154,4 +154,8 @@ class Model extends DboSource {
 		$sql = $this->deleteAdp->createQuery()->getSql();
 		return $this->query($sql);
 	}
+
+	public function getPK() {
+		return $this->pk;
+	}
 }
