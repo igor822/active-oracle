@@ -203,7 +203,6 @@ class OracleConnector implements ConnectorInterface {
 	}
 
 	public function bindParam($stid, $pname, &$variable, $type = SQLT_INT) {
-		var_dump($pname);
 		oci_bind_by_name($stid, ':'.$pname, $variable, -1, $type);
 		return $this;
 	}

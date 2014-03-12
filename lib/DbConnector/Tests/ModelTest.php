@@ -60,4 +60,12 @@ class ModelTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals('SELECT * FROM regions p WHERE (a = count(*))', $sql);
 	}
+
+	public function testInsertExpression() {
+		$sql = $this->regionModel->getQueryAdp('insert')
+								 ->createQuery(array('aaa' => 'aaaaa', 'bbb' => new \DbConnector\DboExpression('sq_id_re.nextval')))
+								 ->getSql();
+
+		$this->assertEquals('INSERT INTO regions (aaa, bbb) VALUES (\'aaaaa\', sq_id_re.nextval)', $sql);
+	}
 }

@@ -25,6 +25,8 @@ class Model extends DboSource {
 
 	private $sourceModel = array();
 
+	protected  $pk = '';
+
 	public $id = null;
 
 	public function __construct($dataSource) {
@@ -34,8 +36,22 @@ class Model extends DboSource {
 		$this->getQueryAdp();
 	}
 
-	public function getQueryAdp() {
-		if ($this->queryAdp === null) $this->queryAdp = new Query($this->sourceModel);
+	public function getQueryAdp($statement = 'query') {
+		switch ($statement){
+			case 'query':
+				if ($this->queryAdp === null) $this->queryAdp = new Query($this->sourceModel);
+				return $this->queryAdp;
+			break;
+			case 'insert':
+				if ($this->insertAdp === null) $this->insertAdp = new Insert($this->sourceModel);
+				return $this->insertAdp;
+			break;
+			case 'update':
+				if ($this->updateAdp === null) $this->updateAdp = new Update($this->sourceModel);
+				return $this->updateAdp;
+			break;
+		}
+		
 		return $this->queryAdp;
 	}
 
