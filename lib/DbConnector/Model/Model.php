@@ -61,7 +61,7 @@ class Model extends DboSource {
 		return $this->fetch($this->queryAdp->getSql());
 	}
 
-	public static function connect($dataSource) {
+	public static function connect($dataSource = null) {
 		return parent::connect($dataSource);
 	}
 
