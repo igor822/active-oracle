@@ -207,4 +207,7 @@ class OracleConnector implements ConnectorInterface {
 		return $this;
 	}
 
+	public function disconnect() {
+		if (!empty($this->_conn)) oci_close($this->_conn);
+	}
 }
