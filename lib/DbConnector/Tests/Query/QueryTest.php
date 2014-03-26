@@ -1,5 +1,5 @@
 <?php
-namespace DbConnector\Tests;
+namespace DbConnector\Tests\Query;
 
 use DbConnector\Query\Query;
 use DbConnector\Query\QueryInterface;

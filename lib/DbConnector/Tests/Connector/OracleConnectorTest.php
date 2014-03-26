@@ -1,6 +1,6 @@
 <?php
 
-namespace DbConnector\Tests;
+namespace DbConnector\Tests\Connector;
 
 use DbConnector\Connector\OracleConnector;
 

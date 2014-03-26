@@ -1,5 +1,5 @@
 <?php
-namespace DbConnector\Tests;
+namespace DbConnector\Tests\Model;
 
 use DbConnector\Model as Model;
 
