@@ -11,7 +11,7 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 	protected static $_dataSource = array(
 		'username' => 'hr',
 		'password' => 'root',
-		'service' => '//localhost:1521',
+		'service' => 'XE',
 		'persistent' => true,
 	);
 
@@ -65,6 +65,33 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertNotEmpty($result);
 		$this->assertInternalType('array', $result);
 
+	}
+
+
+	public function testInstanceWithoutSourceInformation() {
+		$ora_conn = new OracleConnector();
+
+		$this->assertInstanceOf('DbConnector\Connector\OracleConnector', $ora_conn);
+		$this->assertFalse($ora_conn->isConnected());
+
+		$ora_conn->setDataSource(self::$_dataSource)->openConnection();
+
+		$this->assertTrue($ora_conn->isConnected());
+
+		$ora_conn->disconnect();
+
+		$this->assertFalse($ora_conn->isConnected());
+
+		$conf = array(
+			'username' => 'aplciticap',
+			'password' => '4pl1n1c0',
+			'service' => 'SRV_OI',
+			'persistent' => true
+		);
+
+		$ora_conn->setDataSource($conf)->openConnection();
+
+		$this->assertTrue($ora_conn->isConnected());
 	}
 
 }
