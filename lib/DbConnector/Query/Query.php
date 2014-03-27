@@ -116,7 +116,7 @@ class Query implements QueryInterface {
 	 * @return instance
 	 */
 	public function order($order) {
-		$this->parts['order'] = ' ORDER '.$order;
+		$this->parts['order'] = ' ORDER BY '.$order;
 		return $this;
 	}
 
