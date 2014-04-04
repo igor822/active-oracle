@@ -1,23 +1,29 @@
 <?php 
 namespace DbConnector\Query\Parser;
 
+use DbConnector\Query\Query;
+
 class ParseSelect implements ParserInterface {
 
-	const RESERVED_WORDS = 'SELECT|FROM|INNER|OUTER|LEFT|RIGHT|WHERE|GROUP|ORDER';
+	private $patterns = array(
+		'select' => '/select([a-zA-Z0-9\s\(\)](\n|.)*)from/im',
+		'from' => '/(?:\([\s\w]+from[\s\w\=\']+\))|from([a-zA-Z0-9\s\w\,\.\=\(\)]+)\bINNER|OUTER|LEFT|RIGHT|WHERE|GROUP|ORDER\b[a-zA-Z0-9\s\w\,\.\=\<\>\(\)\:]+/im',
+		'where' => array(
+			'match' => '/WHERE([a-zA-Z0-9\s\w\.\=\<\>\[\]\:]+)\b(ORDER|GROUP|HAVING|LIMIT)\b/im',
+			'fetch_content' => '/WHERE([a-zA-Z0-9\s\w\.\=\<\>\[\]\:]+)ORDER|GROUP|HAVING|LIMIT/im',
+			'fetch_all' => '/WHERE([a-zA-Z0-9\s\w\.\=\<\>\[\]\:]+)/im'
+		)
+	);
 
-	const PTRN_SELECT = '/(?!select)(\s(\n|.)*)|(?:\(.*\)))from/im';
-
-	const PTRN_FROM = '/from([a-zA-Z0-9\s\w]+)\b(?:SELECT|FROM|INNER|OUTER|LEFT|RIGHT|WHERE|GROUP|ORDER)\b/im'
-
-	// WHERE([a-zA-Z0-9\s\w\.\=\<\>\[\]\:]+)(?=\b(SELECT|FROM|INNER|OUTER|LEFT|RIGHT|WHERE|ORDER|GROUP)\b)(?(2)?(order)|)
-	const PTRN_WHERE = '';
-
-	const PTR_JOIN = '';
+	private $parts = array();
 
 	private $sql = '';
 
+	private $query = null;
+
 	public function __construct($sql = '') {
 		$this->setSql($sql);
+		//$this->query = new Query();
 	}
 
 	public function setSql($sql = '') {
@@ -29,8 +35,36 @@ class ParseSelect implements ParserInterface {
 	}
 
 	public function parse($clause = 'select') {
-		$pattern = ;
-		
+		$method = 'parse'.ucfirst($clause);
+		if (method_exists($this, $method)) {
+			$this->$method();
+		}	
+	}
+
+	private function parseSelect() {
+		if (preg_match($this->patterns['select'], $this->getSql(), $match)) {
+			$this->parts['select'] = trim($match[1]);
+		}
+		return $this;
+	}
+
+	private function parseFrom() {
+		if (preg_match($this->patterns['from'], $this->getSql(), $match)) {
+			$this->parts['from'] = $match[1];
+		}
+	}
+
+	private function parseWhere() {
+		$sql = $this->getSql();
+		if (preg_match($this->patterns['where']['match'], $sql)) {
+
+		} else {
+
+		}
+	}
+
+	public function getParts() {
+		return $this->parts;
 	}
 
 }
