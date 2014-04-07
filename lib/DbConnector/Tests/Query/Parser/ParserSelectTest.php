@@ -10,14 +10,34 @@ class ParserSelectTest extends \PHPUnit_Framework_TestCase {
 	public function testParserSelectClause() {
 		$parser = new ParseSelect('SELECT a, b, c, de, efe 
 									FROM aaa a, bbb b 
-									inner join aa on aaa.aaa = aaa.aaa 
-									inner join aaav on cddw =dcwddw
-									inner join zzzz on aaaa = asas');
+									inner join aaa aa ON aa = aaa 
+									WHERE a = \'aa\'');
+		$parser->parse('select');
+		$select = $parser->getParts('select')['select'];
+		
+		$this->assertEquals('a, b, c, de, efe', $select);
+
+		return $parser;
+	}
+
+	/**
+	 * @depends testParserSelectClause
+	 **/
+	public function testPaserFromClause(\DbConnector\Query\Parser\ParseSelect $parser = null) {
+		$this->assertNotEmpty($parser);
+
 		$parser->parse('from');
-		$parts = $parser->getParts();
-		var_dump($parts);
-		preg_match('/^(.*?)\s inner/', $parts['from'], $matches);
-		var_dump($matches);
+		$this->assertEquals('aaa a, bbb b', $parser->getParts('from')['from']);
+
+		return $parser;
+	}
+
+	/**
+	 * @depends testParserSelectClause
+	 **/
+	public function testPaserWhereClause(\DbConnector\Query\Parser\ParseSelect $parser = null) {
+		$parser->parse('where');
+		$this->assertEquals('a = \'aa\'', $parser->getParts('where')['where']);
 	}
 
 }
