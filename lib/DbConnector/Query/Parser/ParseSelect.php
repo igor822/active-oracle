@@ -82,7 +82,6 @@ class ParseSelect implements ParserInterface {
 			}
 		} else {
 			if (preg_match($this->patterns['from']['without_join'], $this->getSql(), $match)) {
-				var_dump($match);exit;
 				$this->parts['from'] = trim($match[1]);
 			}
 		}
