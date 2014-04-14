@@ -56,6 +56,14 @@ class ParseSelect implements ParserInterface {
 		}	
 	}
 
+	public function parseAll() {
+		$clauses = array('select', 'from', 'where', 'join', 'group', 'order');
+		foreach ($clauses as $clause) {
+			$this->parse($clause);
+		}
+		return $this;
+	}
+
 	private function parseSelect() {
 		if (preg_match($this->patterns['select'], $this->getSql(), $match)) {
 			$this->parts['select'] = trim($match[1]);
