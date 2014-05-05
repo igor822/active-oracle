@@ -66,7 +66,8 @@ class Model extends DboSource {
 	}
 
 	private function buildQuery($options, &$adapter = null) {
-		if (null === $adapter) $adapter = $this->queryAdp;
+		if (null === $adapter) $adapter = &$this->queryAdp;
+		if (method_exists($adapter, 'clean')) $adapter->clean();
 		if (!empty($options['fields'])) $adapter->select($options['fields']);
 		else $adapter->select();
 
