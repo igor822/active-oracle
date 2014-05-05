@@ -228,4 +228,16 @@ class Query implements QueryInterface {
 		return $this->sql;
 	}
 
+	public function clean() {
+		$this->parts = array(
+			'select' => '',
+			'from' => '',
+			'join' => array(),
+			'where' => array(),
+			'order' => '',
+			'group' => '',
+			'returning' => '',
+		);
+	}
+
 }

@@ -19,4 +19,6 @@ interface QueryInterface {
 
 	public function getSql();
 
+	public function clean();
+
 }
