@@ -57,7 +57,7 @@ class Model extends DboSource {
 
 	public function find($type = 'all', $options = array()) {
 		$this->buildQuery($options);
-		if ($type = 'all') return $this->fetchAll($this->queryAdp->getSql());
+		if ($type == 'all') return $this->fetchAll($this->queryAdp->getSql());
 		return $this->fetch($this->queryAdp->getSql());
 	}
 
