@@ -54,11 +54,12 @@ class DboSource {
 	 * @return {object} $this
 	 */
 	public function setConnector($connector) {
+		
 		try {
-			if (!empty($connector)) {
-				$ns_class_name = __NAMESPACE__.'\\'.'Connector'.'\\'.(ucfirst($connector).'Connector');
-				$this->_connector = new $ns_class_name($this->_dataSource);
-			} else throw new ConnectorException('Connector not found', 1001);
+			if (empty($connector)) throw new ConnectorException('Connector not found', 1001);
+
+			$ns_class_name = __NAMESPACE__.'\\'.'Connector'.'\\'.(ucfirst($connector).'Connector');
+			$this->_connector = new $ns_class_name($this->_dataSource);
 		} catch(\Exception $e) {
 			var_dump($e->getMessage());
 		}
@@ -100,7 +101,9 @@ class DboSource {
 
 	public function query($query) {
 		try {
-			$connector = $this->getConnector()->openConnection();
+			$connector = $this->getConnector()
+							  ->openConnection();
+
 			$stid = $connector->query($query);
 			$connector->clearStatement($stid);
 		} catch (ConnectorException $e) {
@@ -134,10 +137,11 @@ class DboSource {
 	 * @return {array} Resultset
 	 */
 	protected function _call_event($name, $params = array()) {
-		if (method_exists($this, $name)) {
-			$params[0] = call_user_func_array(array($this, $name), $params);
-			return $params[0];
-		}
+		if ( !method_exists($this, $name) ) 
+			return null;
+
+		$params[0] = call_user_func_array(array($this, $name), $params);
+		return $params[0];
 	}
 
 	/**
