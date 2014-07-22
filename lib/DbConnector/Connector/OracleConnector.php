@@ -88,42 +88,46 @@ class OracleConnector implements ConnectorInterface {
 	 * @return object $conn
 	 */
 	public function openConnection() {
+		if ($this->_conn !== null) 
+			return $this;
+
+		if ( empty($this->_dataSource['username']) && 
+			 empty($this->_dataSource['password']) )  
+			throw new DataSourceException\ConnectionException(array('message' => 'Missing connection data', 'code' => 1001));
+		
+						
+		$oci_conn = 'oci_connect';
+		if ( !empty($this->_dataSource['persistent']) && 
+			  $this->_dataSource['persistent'] === true ) 
+			$oci_conn = 'oci_pconnect';
+		
+
+		$this->_conn = $oci_conn(
+							$this->_dataSource['username'], 
+							$this->_dataSource['password'], 
+							$this->_dataSource['service'],
+							(!empty($this->_dataSource['charset']) ? $this->_dataSource['charset'] : '')
+					   );
+		
+		if (!$this->_conn) {
+			$err = oci_error($this->_conn);
+			throw new DataSourceException\ConnectionException($err);
+		}
+
+		
+		return $this;
+	}
+
+	public function getConnection() {
 		try {
 
-			if ($this->_conn !== null) return $this;
-
-			if (empty($this->_dataSource['username']) && empty($this->_dataSource['password'])) { 
-				throw new DataSourceException\ConnectionException(array('message' => 'Missing connection data', 'code' => 1001));
-			}
-							
-			$oci_conn = 'oci_connect';
-			if (!empty($this->_dataSource['persistent']) && $this->_dataSource['persistent'] === true) {
-				$oci_conn = 'oci_pconnect';
-			}
-
-			$this->_conn = $oci_conn(
-								$this->_dataSource['username'], 
-								$this->_dataSource['password'], 
-								$this->_dataSource['service'],
-								(!empty($this->_dataSource['charset']) ? $this->_dataSource['charset'] : '')
-						   );
-			
-			if (!$this->_conn) {
-				$err = oci_error($this->_conn);
-				throw new DataSourceException\ConnectionException($err);
-			}
+			if (isset($this->_conn)) 
+				$this->openConnection();
 
 		} catch(DataSourceException\ConnectionException $e) {
 			var_dump($e->getMessage());
 		} catch (\Exception $e) {
 			var_dump($e->getMessage());
-		}
-		return $this;
-	}
-
-	public function getConnection() {
-		if (isset($this->_conn)) {
-			$this->openConnection();
 		}
 		return $this->_conn;
 	}
@@ -155,25 +159,29 @@ class OracleConnector implements ConnectorInterface {
 	}
 
 	public function prepare($query) {
-		if (!$this->isConnected()) throw new DataSourceException\ConnectionException(array('message' => 'Connector is not connected', 'code' => 500));
+		if ( !$this->isConnected() ) 
+			throw new DataSourceException\ConnectionException(array('message' => 'Connector is not connected', 'code' => 500));
 		$stid = oci_parse($this->_conn, $query);
 		return $stid;
 	}
 
 	public function execute($stid) {
-		if (!$stid) return null;
+		if ( !$stid ) 
+			return null;
 		return oci_execute($stid);
 	}
 
 	public function query($query, $autoCommit = true) {
-		if (!$this->isConnected()) throw new DataSourceException\ConnectionException(array('message' => 'Connector is not connected', 'code' => 500));
+		if ( !$this->isConnected() ) 
+			throw new DataSourceException\ConnectionException(array('message' => 'Connector is not connected', 'code' => 500));
 		$stid = oci_parse($this->_conn, $query);
 		
 		$constCommit = $autoCommit ? OCI_COMMIT_ON_SUCCESS : OCI_DEFAULT;
 
 		oci_execute($stid, $constCommit);
 		
-		if ($autoCommit) oci_commit($this->_conn);
+		if ( $autoCommit ) 
+			oci_commit($this->_conn);
 
 		return $stid;
 	}
