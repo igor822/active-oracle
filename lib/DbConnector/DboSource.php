@@ -13,6 +13,10 @@ class DboSource {
 
 	private static $_instance = null;
 
+	const AUTO_COMMIT = true;
+
+	const NO_AUTO_COMMIT = false;
+
 	/**
 	 * Constructor of object
 	 *
@@ -77,9 +81,9 @@ class DboSource {
 	 * @return {array|object} $it Returns array or ItemIterator
 	 * @access public
 	 */
-	public function fetch($query, $type = 'array', $return = 'one') {
+	public function fetch($query, $type = 'array', $return = 'one', $autoCommit = static::AUTO_COMMIT) {
 		$connector = $this->getConnector();
-		$stid = $connector->query($query);
+		$stid = $connector->query($query, $autoCommit);
 
 		if ($return = 'all') $rs = $connector->fetchAll($stid);
 		else $rs = $connector->fetch($stid);

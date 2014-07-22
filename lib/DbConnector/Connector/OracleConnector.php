@@ -16,10 +16,6 @@ class OracleConnector implements ConnectorInterface {
 
 	private static $_instance;
 
-	const PARAM_CHR = SQLT_CHR;
-
-	const PARAM_INT = SQLT_INT;
-
 	/**
 	 * Constructor
 	 *
@@ -169,12 +165,15 @@ class OracleConnector implements ConnectorInterface {
 		return oci_execute($stid);
 	}
 
-	public function query($query) {
+	public function query($query, $autoCommit = true) {
 		if (!$this->isConnected()) throw new DataSourceException\ConnectionException(array('message' => 'Connector is not connected', 'code' => 500));
 		$stid = oci_parse($this->_conn, $query);
 		
-		oci_execute($stid, OCI_COMMIT_ON_SUCCESS);
-		oci_commit($this->_conn);
+		$constCommit = $autoCommit ? OCI_COMMIT_ON_SUCCESS : OCI_DEFAULT;
+
+		oci_execute($stid, $constCommit);
+		
+		if ($autoCommit) oci_commit($this->_conn);
 
 		return $stid;
 	}
