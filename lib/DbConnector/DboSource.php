@@ -81,7 +81,7 @@ class DboSource {
 	 * @return {array|object} $it Returns array or ItemIterator
 	 * @access public
 	 */
-	public function fetch($query, $type = 'array', $return = 'one', $autoCommit = static::AUTO_COMMIT) {
+	public function fetch($query, $type = 'array', $return = 'one', $autoCommit = true) {
 		$connector = $this->getConnector();
 		$stid = $connector->query($query, $autoCommit);
 
