@@ -1,5 +1,5 @@
 {
-	"name" : "igor822/dbconnector",
+	"name" : "igor822/active-oracle",
 	"description" : "This library allow you to connect with Oracle database without concern about all the oci_* functions",
 	"type" : "library",
 	"authors" : [
@@ -16,13 +16,10 @@
 		"igor822/item-iterator" : "dev-master"
 
 	},
-	"version" : "0.0.3",
+	"version" : "1.0.0",
 	"autoload" : {
-		"psr-0" : {
-			"DbConnector\\" : "lib/"
-		},
-		"classmap" : [
-			"lib/"
-		]
+		"psr-4" : {
+			"ActiveOracle\\" : "src/ActiveOracle/"
+		}
 	}
 }
