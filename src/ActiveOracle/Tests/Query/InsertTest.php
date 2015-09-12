@@ -22,7 +22,7 @@ class InsertTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($insert);
         $insert->createQuery(array('region_id' => 7, 'region_name' => 'AA'));
 
-        $sql = 'INSERT INTO regions (region_id, region_name) VALUES (7, "AA")';
+        $sql = 'INSERT INTO regions (region_id, region_name) VALUES (7, \'AA\')';
         $this->assertEquals($sql, $insert->getSql());
     }
 }

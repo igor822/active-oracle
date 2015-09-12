@@ -27,8 +27,8 @@ class Query implements QueryInterface
     public function __construct($source)
     {
         $this->source = $source;
-        $this->table = ($source['table'] != '' ? $source['table'] : '');
-        $this->alias = ($source['alias'] != '' ? $source['alias'] : '');
+        $this->table = (!empty($source['table']) ? $source['table'] : '');
+        $this->alias = (!empty($source['alias']) ? $source['alias'] : '');
     }
 
     /**

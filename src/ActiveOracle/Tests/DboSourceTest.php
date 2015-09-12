@@ -1,5 +1,6 @@
 <?php
 
+
 namespace ActiveOracle\Tests;
 
 use ActiveOracle\DboSource;
@@ -9,9 +10,9 @@ use ActiveOracle\Exception as DataSourceException;
 class DboSourceTest extends \PHPUnit_Framework_TestCase
 {
     protected static $dataSource = array(
-        'username' => 'hr',
-        'password' => 'root',
-        'service' => '//localhost:1521',
+        'username' => 'system',
+        'password' => 'oracle',
+        'service' => 'localhost:49161',
         'persistent' => true
     );
 
@@ -73,7 +74,7 @@ class DboSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testConnectorInstanceFromModel()
     {
-        $dbo_conn = new Model(array_merge(array('connector' => 'oracle'), self::$dataSource));
+        $dbo_conn = new Model\Model(array_merge(array('connector' => 'oracle'), self::$dataSource));
         $connector = $dbo_conn->getConnector()->openConnection();
 
         $this->assertInstanceOf('ActiveOracle\Connector\OracleConnector', $connector);

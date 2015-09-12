@@ -29,7 +29,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 
         $sql = $query->getSql();
 
-        $q = 'SELECT a, b FROM regions REGIONS WHERE (a = \'fff\' and aaa = 1) AND (a = \'fffaaa\')';
+        $q = 'SELECT a, b FROM regions REGIONS INNER JOIN test t ON t.a = a.a WHERE (a = \'fff\' and aaa = 1) AND (a = \'fffaaa\')';
 
         $this->assertEquals($q, $sql);
     }

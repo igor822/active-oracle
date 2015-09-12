@@ -26,7 +26,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
                ->where('region_id = ?', array(6))
                ->createQuery();
 
-        $sql = 'UPDATE regions SET region_id = 7, region_name = "AA" WHERE (region_id = 6)';
+        $sql = 'UPDATE regions SET region_id = 7, region_name = \'AA\' WHERE (region_id = 6)';
 
         $this->assertEquals($sql, $update->getSql());
     }

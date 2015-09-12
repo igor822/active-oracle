@@ -9,8 +9,8 @@ class ModelTest extends \PHPUnit_Framework_TestCase
     protected static $dataSource = array(
         'connector' => 'oracle',
         'username' => 'hr',
-        'password' => 'root',
-        'service' => '',
+        'password' => 'manager',
+        'service' => 'localhost:49161',
         'persistent' => true
     );
 

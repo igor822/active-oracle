@@ -7,10 +7,10 @@ use ActiveOracle\Connector\OracleConnector;
 class OracleConnectorTest extends \PHPUnit_Framework_TestCase
 {
     protected static $dataSource = array(
-        'username' => 'hr',
-        'password' => 'root',
-        'service' => 'XE',
-        'persistent' => true,
+        'username' => 'system',
+        'password' => 'oracle',
+        'service' => 'localhost:49161',
+        'persistent' => true
     );
 
     public function testIfInstanceOf()
@@ -85,9 +85,9 @@ class OracleConnectorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($ora_conn->isConnected());
 
         $conf = array(
-            'username' => 'aplciticap',
-            'password' => '4pl1n1c0',
-            'service' => 'SRV_OI',
+            'username' => 'system',
+            'password' => 'oracle',
+            'service' => 'localhost:49161',
             'persistent' => true
         );
 
